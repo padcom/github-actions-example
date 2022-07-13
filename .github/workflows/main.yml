@@ -1,17 +1,29 @@
 on: [push]
 
+permissions:
+  contents: read
+  pull-requests: write
+  actions: write
+  statuses: write
+  pages: write
+  deployments: write
+  checks: write
+  discussions: write
+  id-token: write
+  issues: write
+  packages: write
+  repository-projects: read
+  security-events: read
+
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
-      - name: Hello world action step
-        id: hello
-        uses: padcom/github-actions-example@master
-        with:
-          who-to-greet: ${{ env.GITHUB_ACTOR }}
-      # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+      - uses: actions/checkout@v1
+      - run: npm test
+
       - name: Jest Annotations & Coverage
         uses: mattallty/jest-github-action@v1.0.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
